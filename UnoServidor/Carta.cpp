@@ -17,6 +17,11 @@ Carta::Carta(int cor, int numero)
 	this->numero = numero;
 }
 
+std::string Carta::toString() const
+{
+	return std::to_string(cor) + "," + std::to_string(numero);
+}
+
 int Carta::getCor() const
 {
 	return this->cor;

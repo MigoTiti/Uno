@@ -9,6 +9,7 @@ public:
 	int getNumero() const;
 	void setCor(int cor);
 	void setNumero(int numero);
+	std::string toString() const;
 
 	bool operator==(const Carta& carta) const;
 

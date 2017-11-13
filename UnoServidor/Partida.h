@@ -12,7 +12,7 @@ public:
 	Partida(const SOCKET* primeiroJogador, int id);
 	void setId(int id);
 	void adicionarConexao(const SOCKET* jogador);
-	void broadcast(const std::string* mensagem);
+	void multicast(const std::string& mensagem);
 	SOCKET* getConexoes();
 	int getJogadoresConectados();
 	int getId();
@@ -20,7 +20,12 @@ public:
 	void distribuirCartas();
 
 	int nJogadores = 2;
+
+	static const int JOGADA = 4;
+	static const int COMPRAR_CARTA = 5;
+	static const int SEM_CARTAS_CORRENTE = 6;
 private:
+	Carta decodificarCarta(std::string& cartaString);
 
 	Baralho baralho;
 	SOCKET conexoes[2];

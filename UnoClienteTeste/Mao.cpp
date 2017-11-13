@@ -16,7 +16,7 @@ std::ostream& operator<<(std::ostream& os, const Mao& mao)
 		os << i + 1 << " - " << cartas[i] << ";\n";
 	}
 
-	os << cartas.size() + 1 << " - Comprar carta;\n";
+	os << "\n" << cartas.size() + 1 << " - Comprar carta;\n";
 
 	return os;
 }

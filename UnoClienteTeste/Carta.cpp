@@ -12,6 +12,11 @@ Carta::Carta(int cor, int numero)
 	this->numero = numero;
 }
 
+std::string Carta::toString() const
+{
+	return std::to_string(cor) + "," + std::to_string(numero);
+}
+
 std::ostream& operator<<(std::ostream& os, const Carta& carta)
 {
 	std::string cartaString;

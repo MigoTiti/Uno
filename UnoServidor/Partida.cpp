@@ -27,9 +27,47 @@ void Partida::iniciarPartida()
 	{
 		char jogada[256];
 		recv(conexoes[jogadorDaVez - 1], jogada, sizeof(jogada), NULL);
-		broadcast(&(std::string(jogada)));
+
+		std::string jogadaString(jogada);
+
+		std::vector<std::string> tokens;
+		StringUtil::tokenize(jogadaString, tokens, ";");
+		jogadaString = tokens[0];
+
+		tokens.clear();
+		StringUtil::tokenize(jogadaString, tokens, "&");
+
+		char comando = tokens[0][0];
+
+		if (comando - '0' == Partida::JOGADA)
+		{
+			Carta cartaJogada = decodificarCarta(tokens[1]);
+			this->baralho.jogarCarta(cartaJogada);
+			//terminar implementação de jogada
+		}
+		else if (comando - '0' == Partida::COMPRAR_CARTA)
+		{
+			//implementar compra de carta
+		}
+		else if (comando - '0' == Partida::SEM_CARTAS_CORRENTE)
+		{
+			//implementar compra de carta acumulada
+		}
+
+		multicast(std::string(jogada));
 	}
 	
+}
+
+Carta Partida::decodificarCarta(std::string& cartaString)
+{
+	std::vector<std::string> tokens;
+	StringUtil::tokenize(cartaString, tokens, ",");
+
+	int cor = atoi(tokens[0].data());
+	int numero = atoi(tokens[1].data());
+
+	return Carta(cor, numero);
 }
 
 void Partida::distribuirCartas()
@@ -46,9 +84,7 @@ void Partida::distribuirCartas()
 		for (int j = 0; j < 7; j++)
 		{
 			Carta c = baralho.getCartaNoTopo();
-			int cor = c.getCor();
-			int numero = c.getNumero();
-			mensagem = mensagem + "&" + std::to_string(cor) + "," + std::to_string(numero);
+			mensagem = mensagem + "&" + c.toString();
 		}
 
 		mensagem = mensagem + "&" + std::to_string(primeiraCarta.getCor()) + "," + std::to_string(primeiraCarta.getNumero()) + "&";
@@ -66,11 +102,11 @@ void Partida::adicionarConexao(const SOCKET* jogador)
 	}
 }
 
-void Partida::broadcast(const std::string* mensagem)
+void Partida::multicast(const std::string& mensagem)
 {
 	for (int i = 0; i < this->jogadoresConectados; i++)
 	{
-		send(this->conexoes[i], (*mensagem).data(), static_cast<int>((*mensagem).size()), NULL);
+		send(this->conexoes[i], mensagem.data(), static_cast<int>(mensagem.size()), NULL);
 	}
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stdafx.h"
+
 class Carta
 {
 public:
@@ -9,6 +11,7 @@ public:
 	int getNumero() const;
 	void setCor(int cor);
 	void setNumero(int numero);
+	std::string toString() const;
 
 	friend std::ostream& operator<<(std::ostream& os, const Carta& carta);
 
