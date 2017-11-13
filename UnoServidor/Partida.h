@@ -13,7 +13,6 @@ public:
 	void setId(int id);
 	void adicionarConexao(const SOCKET* jogador);
 	void broadcast(const std::string* mensagem);
-	void definirJogadores();
 	SOCKET* getConexoes();
 	int getJogadoresConectados();
 	int getId();

@@ -6,18 +6,23 @@ Carta::Carta()
 
 }
 
+bool Carta::operator==(const Carta& carta) const
+{
+	return this->cor == carta.getCor() && this->numero == carta.getNumero();
+}
+
 Carta::Carta(int cor, int numero)
 {
 	this->cor = cor;
 	this->numero = numero;
 }
 
-int Carta::getCor()
+int Carta::getCor() const
 {
 	return this->cor;
 }
 
-int Carta::getNumero()
+int Carta::getNumero() const
 {
 	return this->numero;
 }

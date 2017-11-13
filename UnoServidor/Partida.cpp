@@ -20,6 +20,9 @@ Partida::Partida(const SOCKET* primeiroJogador, int id) : Partida(primeiroJogado
 void Partida::iniciarPartida()
 {
 	bool sentidoHorario = true;
+	this->baralho.jogarCarta(this->baralho.getCartaNoTopo());
+
+	//implementar lógica de jogo e troca de vez de jogador
 	while (true)
 	{
 		char jogada[256];
@@ -32,9 +35,13 @@ void Partida::iniciarPartida()
 void Partida::distribuirCartas()
 {
 	this->baralho = Baralho();
+	this->baralho.jogarCarta(this->baralho.getCartaNoTopo());
+
+	Carta primeiraCarta = baralho.getCartaNaMesa();
+
 	for (int i = 0; i < jogadoresConectados; i++)
 	{
-		std::string mensagem = "3" + std::to_string(nJogadores);
+		std::string mensagem = "3" + std::to_string(i + 1);
 
 		for (int j = 0; j < 7; j++)
 		{
@@ -44,18 +51,10 @@ void Partida::distribuirCartas()
 			mensagem = mensagem + "&" + std::to_string(cor) + "," + std::to_string(numero);
 		}
 
+		mensagem = mensagem + "&" + std::to_string(primeiraCarta.getCor()) + "," + std::to_string(primeiraCarta.getNumero()) + "&";
 		std::cout << "\n" << mensagem << "\n";
-
-		send(this->conexoes[i], mensagem.c_str(), strlen(mensagem.c_str()), NULL);
-	}
-}
-
-void Partida::definirJogadores()
-{
-	for (int i = 0; i < this->jogadoresConectados - 1; i++)
-	{
-		std::string mensagem = std::to_string(i + 1);
-		send(this->conexoes[i], mensagem.c_str(), strlen(mensagem.c_str()), NULL);
+		
+		send(this->conexoes[i], mensagem.data(), static_cast<int>(mensagem.size()), NULL);
 	}
 }
 
@@ -71,7 +70,7 @@ void Partida::broadcast(const std::string* mensagem)
 {
 	for (int i = 0; i < this->jogadoresConectados; i++)
 	{
-		send(this->conexoes[i], (*mensagem).c_str(), strlen((*mensagem).c_str()), NULL);
+		send(this->conexoes[i], (*mensagem).data(), static_cast<int>((*mensagem).size()), NULL);
 	}
 }
 

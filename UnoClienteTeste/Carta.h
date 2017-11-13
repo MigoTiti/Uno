@@ -5,10 +5,12 @@ class Carta
 public:
 	Carta();
 	Carta(int cor, int numero);
-	int getCor();
-	int getNumero();
+	int getCor() const;
+	int getNumero() const;
 	void setCor(int cor);
 	void setNumero(int numero);
+
+	friend std::ostream& operator<<(std::ostream& os, const Carta& carta);
 
 	static const int COR_PRETA = 0;
 	static const int COR_VERMELHA = 1;

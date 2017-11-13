@@ -33,8 +33,19 @@ Baralho::Baralho()
 	this->cartas.push_back(Carta(Carta::COR_PRETA, Carta::MAIS_QUATRO));
 	this->cartas.push_back(Carta(Carta::COR_PRETA, Carta::MAIS_QUATRO));
 
-	std::srand(time(0));
+	std::srand(static_cast<int>(time(0)));
 	std::random_shuffle(this->cartas.begin(), this->cartas.end());
+}
+
+void Baralho::jogarCarta(const Carta& carta)
+{
+	cartasJogadas.push_back(cartaNaMesa);
+	cartaNaMesa = carta;
+}
+
+Carta Baralho::getCartaNaMesa() const
+{
+	return this->cartaNaMesa;
 }
 
 vector<Carta> Baralho::getCartas()
@@ -46,6 +57,5 @@ Carta Baralho::getCartaNoTopo()
 {
 	Carta c = cartas.back();
 	cartas.pop_back();
-	cartasJogadas.push_back(c);
 	return c;
 }

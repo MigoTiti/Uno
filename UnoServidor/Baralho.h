@@ -10,10 +10,9 @@ class Baralho
 public:
 	Baralho();
 	Carta getCartaNoTopo();
-	//Carta getCartaNoFundo();
-	//Carta getCartaNaMesa();
+	Carta getCartaNaMesa() const;
 	vector<Carta> getCartas();
-	//void jogarCarta(const Carta* carta);
+	void jogarCarta(const Carta& carta);
 private:
 	Carta cartaNaMesa;
 	vector<Carta> cartasJogadas;

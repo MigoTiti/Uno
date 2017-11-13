@@ -10,7 +10,11 @@ class Mao
 public:
 	Mao();
 	void setCartas(vector<Carta> cartas);
-	vector<Carta> getCartas();
+	void removerCartaEmIndice(int indice);
+	Carta getCartaEmIndice(int indice);
+	vector<Carta> getCartas() const;
+	
+	friend std::ostream& operator<<(std::ostream& os, const Mao& mao);
 private:
 	vector<Carta> cartas;
 };
