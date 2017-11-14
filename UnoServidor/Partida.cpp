@@ -82,17 +82,22 @@ void Partida::iniciarPartida()
 		{
 			if (correnteCompra)
 			{
-
+				//implementar compra de corrente de carta 
+				correnteCompra = false;
 			}
 			else
 			{
-
+				//sintaxe retorno de compra: CÓDIGO DE COMANDO & NÚMERO DE CARTAS COMPRADAS & CARTAS &
+				Carta cartaComprada = this->baralho.getCartaNoTopo();
+				std::string retorno(std::to_string(Partida::RETORNO_COMPRA) + "&1&" + cartaComprada.toString() + "&");
+				multicast(retorno);
 			}
-			//implementar compra de carta
 		}
 		else if (comando - '0' == Partida::PULAR_JOGADA)
 		{
-			//implementar compra de carta acumulada
+			incrementarVezDoJogador(1, sentidoHorario);
+			std::string retorno(std::to_string(Partida::PULAR_JOGADA) + "&" + std::to_string(jogadorDaVez) + "&");
+			multicast(retorno);
 		}
 	}
 
