@@ -77,13 +77,20 @@ void Partida::iniciarPartida()
 			}
 				
 			multicast(retorno);
-			//terminar implementação de jogada
 		}
 		else if (comando - '0' == Partida::COMPRAR_CARTA)
 		{
+			if (correnteCompra)
+			{
+
+			}
+			else
+			{
+
+			}
 			//implementar compra de carta
 		}
-		else if (comando - '0' == Partida::SEM_CARTAS_CORRENTE)
+		else if (comando - '0' == Partida::PULAR_JOGADA)
 		{
 			//implementar compra de carta acumulada
 		}
