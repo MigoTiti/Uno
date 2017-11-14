@@ -18,12 +18,15 @@ public:
 	int getId();
 	void iniciarPartida();
 	void distribuirCartas();
+	void incrementarVezDoJogador(int valor, bool horario);
 
 	int nJogadores = 2;
 
 	static const int JOGADA = 4;
 	static const int COMPRAR_CARTA = 5;
 	static const int SEM_CARTAS_CORRENTE = 6;
+	static const int RETORNO_JOGADA = 7;
+	static const int RETORNO_COMPRA = 8;
 private:
 	Carta decodificarCarta(std::string& cartaString);
 

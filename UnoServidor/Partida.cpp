@@ -20,6 +20,8 @@ Partida::Partida(const SOCKET* primeiroJogador, int id) : Partida(primeiroJogado
 void Partida::iniciarPartida()
 {
 	bool sentidoHorario = true;
+	bool correnteCompra = false;
+	int contagemCorrente = 0;
 	this->baralho.jogarCarta(this->baralho.getCartaNoTopo());
 
 	//implementar lógica de jogo e troca de vez de jogador
@@ -43,6 +45,38 @@ void Partida::iniciarPartida()
 		{
 			Carta cartaJogada = decodificarCarta(tokens[1]);
 			this->baralho.jogarCarta(cartaJogada);
+
+			//sintaxe retorno de jogada = CÓDIGO DE JOGADA & CARTA JOGADA & SENTIDO HORÁRIO & PRÓXIMO JOGADOR A JOGAR & CORRENTE DE COMPRA (LIGADO OU DESLIGADO) & CONTADOR DE CORENTE (SE LIGADO) &
+			int numero = cartaJogada.getNumero();
+
+			std::string retorno(std::to_string(Partida::RETORNO_JOGADA) + "&" + cartaJogada.toString() + "&");
+
+			if (numero == Carta::MAIS_DOIS || numero == Carta::MAIS_QUATRO)
+			{
+				numero == Carta::MAIS_DOIS ? contagemCorrente += 2 : contagemCorrente += 4;
+				correnteCompra = true;
+				incrementarVezDoJogador(1, sentidoHorario);
+
+				retorno = retorno + (sentidoHorario ? "1" : "0") + "&" + std::to_string(jogadorDaVez) + "&1&" + std::to_string(contagemCorrente) + "&";
+			}
+			else if (numero == Carta::BLOQUEAR)
+			{
+				incrementarVezDoJogador(2, sentidoHorario);
+				retorno = retorno + (sentidoHorario ? "1" : "0") + "&" + std::to_string(jogadorDaVez) + "&0&";
+			}
+			else if (numero == Carta::REVERTER)
+			{
+				sentidoHorario = !sentidoHorario;
+				incrementarVezDoJogador(1, sentidoHorario);
+				retorno = retorno + (sentidoHorario ? "1" : "0") + "&" + std::to_string(jogadorDaVez) + "&0&";
+			}
+			else 
+			{
+				incrementarVezDoJogador(1, sentidoHorario);
+				retorno = retorno + (sentidoHorario ? "1" : "0") + "&" + std::to_string(jogadorDaVez) + "&0&";
+			}
+				
+			multicast(retorno);
 			//terminar implementação de jogada
 		}
 		else if (comando - '0' == Partida::COMPRAR_CARTA)
@@ -53,10 +87,20 @@ void Partida::iniciarPartida()
 		{
 			//implementar compra de carta acumulada
 		}
-
-		multicast(std::string(jogada));
 	}
-	
+
+}
+
+void Partida::incrementarVezDoJogador(int valor, bool horario)
+{
+	if (horario)
+		for (int i = 1; i <= valor; i++)
+			jogadorDaVez == nJogadores ? jogadorDaVez = 1 : jogadorDaVez++;
+	else
+	{
+		for (int i = 1; i <= valor; i++)
+			jogadorDaVez == 1 ? jogadorDaVez = nJogadores : jogadorDaVez--;
+	}
 }
 
 Carta Partida::decodificarCarta(std::string& cartaString)
@@ -89,7 +133,7 @@ void Partida::distribuirCartas()
 
 		mensagem = mensagem + "&" + std::to_string(primeiraCarta.getCor()) + "," + std::to_string(primeiraCarta.getNumero()) + "&";
 		std::cout << "\n" << mensagem << "\n";
-		
+
 		send(this->conexoes[i], mensagem.data(), static_cast<int>(mensagem.size()), NULL);
 	}
 }
